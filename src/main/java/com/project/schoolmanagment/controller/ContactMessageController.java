@@ -23,12 +23,25 @@ public class ContactMessageController {
 
     private final ContactMessageService contactMessageService;
 
+    /**
+     *
+     * @param contactMessageRequest
+     * @return save a ContactMessage
+     */
     @PostMapping("/save")
     public ResponseMessage<ContactMessageResponse> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest){
        return contactMessageService.save(contactMessageRequest);
     }
 
-@GetMapping("/getAll")
+    /**
+     *
+     * @param page number of selected page
+     * @param size of the page
+     * @param sort sort propriety
+     * @param type DESC or ASC
+     * @return ContactMessageResponse
+     */
+    @GetMapping("/getAll")
     public Page<ContactMessageResponse> getAll(
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size,
@@ -88,14 +101,13 @@ public ResponseEntity<Map<String, String>> deleteContactMessageById(@PathVariabl
         List<ContactMessageResponse> contactMessageResponses = contactMessageService.getAllAsList();
         return ResponseEntity.ok(contactMessageResponses);
     }
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<Map<String, String>> updateContactMessage(@Valid @PathVariable Long id,@RequestBody ContactMessageResponse contactMessageResponse){
-//        contactMessageService.updateContactMessage(id,contactMessageResponse);
-//        Map<String, String> map = new HashMap<>();
-//        map.put("message", "Message updated successfully.");
-//        map.put("status", "true");
-//        return new ResponseEntity<>(map, HttpStatus.OK);
-//    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, String>> updateContactMessage(@Valid @PathVariable Long id,@RequestBody ContactMessageResponse contactMessageResponse){
+        contactMessageService.updateContactMessage(id,contactMessageResponse);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Message updated successfully.");
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 
 
 

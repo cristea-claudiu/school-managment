@@ -17,4 +17,6 @@ public interface ContactMessageRepository extends JpaRepository<ContactMessage,L
     Page<ContactMessage> findByEmailEquals(String email,Pageable pageable);
 
     Page<ContactMessage> findBySubjectEquals(String subject, Pageable pageable);
+
+    boolean existsByEmail(String email);
 }

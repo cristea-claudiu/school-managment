@@ -99,12 +99,19 @@ public class ContactMessageService {
         return contactMessageRepository.findAll().stream().map(this::createResponse).collect(Collectors.toList());
     }
 
-//    public void updateContactMessage(Long id, ContactMessageResponse contactMessageResponse) {
-//        ContactMessage existingContactMessage=getContactMessageById(id);
-//
-//        existingContactMessage.set
-//
-//
-//
-//    }
+    public void updateContactMessage(Long id, ContactMessageResponse contactMessageResponse) {
+        ContactMessage existingContactMessage=getContactMessageById(id);
+
+        boolean idExist = contactMessageRepository.existsById(existingContactMessage.getId());
+        if (!contactMessageRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Contact message with id " + id + " does not exist");
+        }
+
+        existingContactMessage.setMessage(contactMessageResponse.getMessage());
+        existingContactMessage.setName(contactMessageResponse.getName());
+        existingContactMessage.setSubject(contactMessageResponse.getSubject());
+        try {
+            contactMessageRepository.save(existingContactMessage);
+        } catch (Exception e) {throw new RuntimeException("Failed to update contact message", e);}
+    }
 }

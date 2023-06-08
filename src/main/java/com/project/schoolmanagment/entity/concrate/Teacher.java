@@ -4,10 +4,9 @@ import com.project.schoolmanagment.entity.abstracts.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,6 +26,17 @@ public class Teacher extends User {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
+    private List<StudentInfo> studentInfos;
+
+    @ManyToMany
+    @JoinTable(
+            name = "teacher_lessonprogram",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_program_id")
+    )
+    private Set<LessonProgram> lessonsProgramList;
 
 
 
