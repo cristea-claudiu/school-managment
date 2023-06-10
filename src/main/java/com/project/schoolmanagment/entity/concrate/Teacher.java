@@ -36,7 +36,7 @@ public class Teacher extends User {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id")
     )
-    private Set<LessonProgram> lessonsProgramList;
+    private Set<LessonProgram> lessonProgramList;
 
 
 

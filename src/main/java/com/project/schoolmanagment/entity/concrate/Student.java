@@ -44,7 +44,7 @@ public class Student extends User {
             name="student_lesonprogram",
             joinColumns  =@JoinColumn(name= "student_id"),
             inverseJoinColumns = @JoinColumn(name = "lesson_program_id"))
-    private Set<LessonProgram> lessonsProgramList;
+    private Set<LessonProgram> lessonProgramList;
 
     @JsonIgnore
     @ManyToMany

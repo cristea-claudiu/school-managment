@@ -34,23 +34,28 @@ public class LessonProgram {
     private LocalTime stopTime;
 
     @ManyToMany
+    @JoinTable(
+            name = "lesson_program_lesson",
+            joinColumns = @JoinColumn(name = "lessonprogram_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_id")
+    )
     private Set<Lesson> lesson;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "lessonProgramList",fetch = FetchType.EAGER)
     private Set<Teacher> teachers;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "lessonProgramList",fetch = FetchType.EAGER)
     private Set<Student> students;
 
     @PreRemove
     private void removeLessonProgramFromStudent(){
-        teachers.forEach(teacher->teacher.getLessonsProgramList().remove(this));
-        students.forEach(student->student.getLessonsProgramList().remove(this));
+        teachers.forEach(teacher->teacher.getLessonProgramList().remove(this));
+        students.forEach(student->student.getLessonProgramList().remove(this));
 
     }
 
