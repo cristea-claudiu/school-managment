@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.security.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,22 +20,30 @@ public class UserDetailsImpl implements UserDetails {
 
 
     private Long id;
-    private String username;
-    private String name;
-    private boolean isAdvisor;
-    private String password;
-    private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id,String username,String name,boolean isAdvisor,String password,String role){
+    private String username;
+
+    private String name;
+
+    private Boolean isAdvisor;
+
+    @JsonIgnore
+    private String password;
+
+    private Collection<? extends GrantedAuthority>authorities;
+
+    public UserDetailsImpl(Long id,String username,String name,Boolean isAdvisor,String password,String role){
         this.id = id;
-        this.username= username;
+        this.username = username;
         this.name = name;
-        this.isAdvisor = isAdvisor;
+        this.isAdvisor =isAdvisor;
         this.password = password;
-        List<GrantedAuthority> grantedAuthorities =new ArrayList<>();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
-        this.authorities=grantedAuthorities;
+        this.authorities = grantedAuthorities;
     }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -69,14 +78,17 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
     public boolean equals(Object o){
-        if (this == o){
+        if(this == o){
             return true;
         }
-        if (o == null||getClass()!=o.getClass()){
+        //matching the class types
+        if(o== null || getClass()!=o.getClass()){
             return false;
         }
-        UserDetailsImpl user =(UserDetailsImpl) o;
+        //matching the id.s
+        UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id,user.getId());
     }
 }

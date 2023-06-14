@@ -1,5 +1,6 @@
 package com.project.schoolmanagment.security.service;
 
+import com.project.schoolmanagment.entity.abstracts.User;
 import com.project.schoolmanagment.entity.concrate.*;
 import com.project.schoolmanagment.repository.*;
 import lombok.AllArgsConstructor;
@@ -24,53 +25,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin    admin=   adminRepository.findByUsernameEquals(username);
-        Teacher  teacher= teacherRepository.findByUsernameEquals(username);
-        Dean     dean=    deanRepository.findByUsernameEquals(username);
-        ViceDean viceDean=viceDeanRepository.findByUsernameEquals(username);
-        Student  student= studentRepository.findByUsernameEquals(username);
-        if (student!=null){
-            return new UserDetailsImpl(
-                    student.getId(),
-                    student.getUsername(),
-                    student.getName(),
-                    false,
-                    student.getPassword(),
-                    student.getUserRole().getRoleType().name());
-        } else if (teacher != null) {
-            return new UserDetailsImpl(
-                    teacher.getId(),
-                    teacher.getUsername(),
-                    teacher.getName(),
-                    false,
-                    teacher.getPassword(),
-                    teacher.getUserRole().getRoleType().name());
-        }else if (viceDean != null) {
-            return new UserDetailsImpl(
-                    viceDean.getId(),
-                    viceDean.getUsername(),
-                    viceDean.getName(),
-                    false,
-                    viceDean.getPassword(),
-                    viceDean.getUserRole().getRoleType().name());
-        }else if (dean != null) {
-            return new UserDetailsImpl(
-                    dean.getId(),
-                    dean.getUsername(),
-                    dean.getName(),
-                    false,
-                    dean.getPassword(),
-                    dean.getUserRole().getRoleType().name());
-        }else if (admin != null) {
-            return new UserDetailsImpl(
-                    admin.getId(),
-                    admin.getUsername(),
-                    admin.getName(),
-                    false,
-                    admin.getPassword(),
-                    admin.getUserRole().getRoleType().name());
+        User  student= studentRepository.findByUsernameEquals(username);
+        User user = null;
+        if (student != null) {
+            user = student;
         }
-        throw new UsernameNotFoundException("User: '"+username+"' not found");
-
+        User  teacher= teacherRepository.findByUsernameEquals(username);
+        if (teacher != null) {
+            user = teacher;
+        }
+        User    admin=   adminRepository.findByUsernameEquals(username);
+        if (admin != null) {
+            user = admin;
+        }
+        User     dean=    deanRepository.findByUsernameEquals(username);
+        if (dean != null) {
+            user = dean;
+        }
+        User viceDean=viceDeanRepository.findByUsernameEquals(username);
+        if (viceDean != null) {
+            user = viceDean;
+        }
+        if (user != null) {
+            return new UserDetailsImpl(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getName(),
+                    false,
+                    user.getPassword(),
+                    user.getUserRole().getRoleType().name());
+        }
+        throw new UsernameNotFoundException("User with user name '" + username + "' not found!");
     }
 }

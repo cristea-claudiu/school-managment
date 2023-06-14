@@ -1,20 +1,16 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concrate.Admin;
+
 import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.payload.response.AdminResponse;
 import com.project.schoolmanagment.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("admin")
