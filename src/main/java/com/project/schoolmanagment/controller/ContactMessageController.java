@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,6 +43,7 @@ public class ContactMessageController {
      * @return ContactMessageResponse
      */
     @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<ContactMessageResponse> getAll(
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size,
@@ -60,6 +62,7 @@ public class ContactMessageController {
      * @return ContactMessageResponse
      */
     @GetMapping("/searchByEmail")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<ContactMessageResponse> searchByEmail(
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size,
@@ -79,6 +82,7 @@ public class ContactMessageController {
      * @return ContactMessageResponse
      */
     @GetMapping("/searchBySubject")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
 public Page<ContactMessageResponse> searchBySubject(
         @RequestParam(value = "page",defaultValue = "0") int page,
         @RequestParam(value = "size",defaultValue = "10") int size,
@@ -89,6 +93,7 @@ public Page<ContactMessageResponse> searchBySubject(
 }
 
 @DeleteMapping("/delete/{id}")
+@PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
 public ResponseEntity<Map<String, String>> deleteContactMessageById(@PathVariable Long id) {
     contactMessageService.deleteContactMessageById(id);
     Map<String, String> map = new HashMap<>();
@@ -97,11 +102,13 @@ public ResponseEntity<Map<String, String>> deleteContactMessageById(@PathVariabl
     }
 
     @GetMapping("/getALLAsList")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseEntity<List<ContactMessageResponse>> getAllAsList() {
         List<ContactMessageResponse> contactMessageResponses = contactMessageService.getAllAsList();
         return ResponseEntity.ok(contactMessageResponses);
     }
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseEntity<Map<String, String>> updateContactMessage(@Valid @PathVariable Long id,@RequestBody ContactMessageResponse contactMessageResponse){
         contactMessageService.updateContactMessage(id,contactMessageResponse);
         Map<String, String> map = new HashMap<>();
