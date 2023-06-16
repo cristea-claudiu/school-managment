@@ -32,7 +32,6 @@ public class DeanController {
 
     }
 
-    //TODO HOMEWORK write this delete message again with requestParam
     @DeleteMapping("/delete/{userId}")
     public ResponseMessage<?> deleteDeanById(@PathVariable Long userId) {
         return deanService.deleteDeanById(userId);
