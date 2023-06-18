@@ -9,7 +9,7 @@ import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.DeanRepository;
 import com.project.schoolmanagment.utils.CheckParameterUpdateMethod;
-import com.project.schoolmanagment.utils.FieldControl;
+import com.project.schoolmanagment.utils.ServiceHelpers;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,14 +28,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DeanService {
 
-    private final FieldControl fieldControl;
+    private final ServiceHelpers serviceHelpers;
     private final DeanDto deanDto;
     private final DeanRepository deanRepository;
     private final UserRoleService  userRoleService;
     private final PasswordEncoder passwordEncoder;
     //TODO use mapsturct in your 3. repository
      public ResponseMessage<DeanResponse> save(DeanRequest deanRequest){
-         fieldControl.checkDuplicate(deanRequest.getUsername(),deanRequest.getSsn(),deanRequest.getPhoneNumber());
+         serviceHelpers.checkDuplicate(deanRequest.getUsername(),deanRequest.getSsn(),deanRequest.getPhoneNumber());
          Dean dean=deanDto.mapDeanRequestToDean(deanRequest);
          dean.setPassword(passwordEncoder.encode(deanRequest.getPassword()));
          dean.setUserRole(userRoleService.getUserRole(RoleType.MANAGER));
@@ -52,7 +52,7 @@ public class DeanService {
     public ResponseMessage<DeanResponse> update(DeanRequest deanRequest, Long deanId) {
         Optional<Dean> dean = isDeanExist(deanId);
          if (!CheckParameterUpdateMethod.checkUniqueProperties(dean.get(),deanRequest)) {
-            fieldControl.checkDuplicate(deanRequest.getUsername(),
+            serviceHelpers.checkDuplicate(deanRequest.getUsername(),
                                         deanRequest.getSsn(),
                                         deanRequest.getPhoneNumber());
         }
@@ -98,10 +98,7 @@ public class DeanService {
     }
 
     public Page<DeanResponse> getAllDeansByPage(int page, int size, String sort, String type) {
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sort).ascending());
-        if(Objects.equals(type,"desc")){
-            pageable=PageRequest.of(page,size, Sort.by(sort).descending());
-        }
+        Pageable pageable = serviceHelpers.getPageableWithProperties(page,size,sort,type);
 
         return  deanRepository.findAll(pageable).map(deanDto::mapDeanToDeanResponse);
     }

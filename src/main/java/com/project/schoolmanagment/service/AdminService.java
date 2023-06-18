@@ -7,7 +7,7 @@ import com.project.schoolmanagment.payload.request.AdminRequest;
 import com.project.schoolmanagment.payload.response.AdminResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.repository.*;
-import com.project.schoolmanagment.utils.FieldControl;
+import com.project.schoolmanagment.utils.ServiceHelpers;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,10 +25,10 @@ import java.util.Optional;
 public class AdminService {
     private final AdminRepository adminRepository;
     private final UserRoleService  userRoleService;
-    private final FieldControl fieldControl;
+    private final ServiceHelpers serviceHelpers;
 
     public ResponseMessage save(AdminRequest adminRequest){
-        fieldControl.checkDuplicate(adminRequest.getUsername(),adminRequest.getSsn(),adminRequest.getPhoneNumber());
+        serviceHelpers.checkDuplicate(adminRequest.getUsername(),adminRequest.getSsn(),adminRequest.getPhoneNumber());
         Admin admin=mapAdminRequestToAdmin(adminRequest);
         admin.setBuild_in(false);
         if(Objects.equals(adminRequest.getUsername(),"Admin")){
