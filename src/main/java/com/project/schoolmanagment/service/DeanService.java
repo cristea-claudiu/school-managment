@@ -13,15 +13,12 @@ import com.project.schoolmanagment.utils.ServiceHelpers;
 import com.project.schoolmanagment.utils.Messages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -33,7 +30,6 @@ public class DeanService {
     private final DeanRepository deanRepository;
     private final UserRoleService  userRoleService;
     private final PasswordEncoder passwordEncoder;
-    //TODO use mapsturct in your 3. repository
      public ResponseMessage<DeanResponse> save(DeanRequest deanRequest){
          serviceHelpers.checkDuplicate(deanRequest.getUsername(),deanRequest.getSsn(),deanRequest.getPhoneNumber());
          Dean dean=deanDto.mapDeanRequestToDean(deanRequest);
@@ -42,7 +38,7 @@ public class DeanService {
 
          Dean savedDean=deanRepository.save(dean);
          return ResponseMessage.<DeanResponse>builder()
-                 .message("Dean saved")
+                 .message(Messages.DEAN_SAVED_SUCCESSFULLY)
                  .httpStatus(HttpStatus.CREATED)
                  .object(deanDto.mapDeanToDeanResponse(savedDean))
                  .build();
@@ -60,7 +56,7 @@ public class DeanService {
         updatedDean.setPassword(passwordEncoder.encode(deanRequest.getPassword()));
         Dean savedDean =deanRepository.save(updatedDean);
         return ResponseMessage.<DeanResponse>builder()
-                .message("Dean Updated successfully")
+                .message(Messages.DEAN_UPDATED_SUCCESSFULLY)
                 .httpStatus(HttpStatus.OK)
                 .object(deanDto.mapDeanToDeanResponse(savedDean))
                 .build();
@@ -79,14 +75,14 @@ public class DeanService {
 
     deanRepository.deleteById(deanId);
         return ResponseMessage.<DeanResponse>builder()
-                .message("Dean deleted successfully")
+                .message(Messages.DEAN_DELETED_SUCCESSFULLY)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
 
     public ResponseMessage<DeanResponse> getDeanById(Long deanId) {
          return ResponseMessage.<DeanResponse>builder()
-                 .message("Dean found successfully")
+                 .message(Messages.DEAN_FOUND_SUCCESSFULLY)
                  .httpStatus(HttpStatus.OK)
                  .object(deanDto.mapDeanToDeanResponse(isDeanExist(deanId).get()))
                  .build();

@@ -31,7 +31,6 @@ public class AdminController {
                                                       @RequestParam(value = "size",defaultValue = "10")int size,
                                                       @RequestParam(value = "sort",defaultValue = "name")String sort,
                                                       @RequestParam(value = "type",defaultValue = "desc")String type){
-
         Page<AdminResponse> admins= adminService.getAllAdmins(page,size,sort,type);
         return new ResponseEntity<>(admins, HttpStatus.OK);
     }

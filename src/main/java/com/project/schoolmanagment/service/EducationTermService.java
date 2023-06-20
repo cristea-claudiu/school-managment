@@ -28,47 +28,25 @@ public class EducationTermService {
 
 
     public ResponseMessage<EducationTermResponse> saveEducationTerm(EducationTermRequest educationTermRequest) {
-        checkEducationTermDate(educationTermRequest);
+        educationTermDto.checkEducationTermDate(educationTermRequest);
         EducationTerm savedEducationTerm=educationTermRepository.save(educationTermDto.mapEducationTermRequestToEducationTerm(educationTermRequest));
-
         return ResponseMessage.<EducationTermResponse>builder()
-                .message("Education Term saved")
+                .message(Messages.EDUCATION_TERM_SAVED_MESSAGE)
                 .object(educationTermDto.mapEducationTermToEducationTermResponse(savedEducationTerm))
                 .httpStatus(HttpStatus.CREATED)
                 .build();
 
     }
 
-    private void checkEducationTermDate(EducationTermRequest educationTermRequest){
-        if (educationTermRequest.getLastRegistrationDate().isAfter(educationTermRequest.getStartDate())){
-            throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
-        }
-        if (educationTermRequest.getEndDate().isBefore(educationTermRequest.getStartDate())){
-            throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
-        }
-        if(educationTermRepository.existsByTermAndYear(educationTermRequest.getTerm(),educationTermRequest.getStartDate().getYear())){
-            throw new ResourceNotFoundException(Messages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
-        }
-    }
-    private void checkEducationTermDateForUpdate(EducationTermRequest educationTermRequest){
-        if (educationTermRequest.getLastRegistrationDate().isAfter(educationTermRequest.getStartDate())){
-            throw new ResourceNotFoundException(Messages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
-        }
-        if (educationTermRequest.getEndDate().isBefore(educationTermRequest.getStartDate())){
-            throw new ResourceNotFoundException(Messages.EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE);
-        }
-    }
-    private EducationTerm checkEducationTermExist(Long id){
-        EducationTerm term=educationTermRepository.findByIdEquals(id);
-        if(term==null){
-            throw new ResourceNotFoundException("Could not find Education term with id " + id);
-        }
-        return term;
+    public EducationTermResponse findEducationTermResponseById(Long id) {
+        return educationTermDto.mapEducationTermToEducationTermResponse(educationTermRepository
+                .findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id))));
 
     }
-
-    public EducationTermResponse findEducationTermById(Long id) {
-        return educationTermDto.mapEducationTermToEducationTermResponse(educationTermRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Could not find Education term with id " + id)));
+    public EducationTerm getEducationTermById(Long id) {
+        return educationTermRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id)));
 
     }
 
@@ -82,20 +60,20 @@ public class EducationTermService {
     }
 
     public ResponseMessage<?> deleteEducationTermById(Long id) {
-        checkEducationTermExist(id);
+        educationTermDto.checkEducationTermExist(id);
         educationTermRepository.deleteById(id);
         return ResponseMessage.builder()
-                .message("Education Term deleted successfully")
+                .message(Messages.EDUCATION_TERM_DELETED_MESSAGE)
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
 
     public ResponseMessage<EducationTermResponse> updateEducationTerm(Long id, EducationTermRequest educationTermRequest) {
-        checkEducationTermExist(id);
-        checkEducationTermDateForUpdate(educationTermRequest);
+        educationTermDto.checkEducationTermExist(id);
+        educationTermDto.checkEducationTermDateForUpdate(educationTermRequest);
         EducationTerm updatedEducationTerm=educationTermRepository.save(educationTermDto.mapEducationTermRequestToUpdatedEducationTerm(id,educationTermRequest));
         return ResponseMessage.<EducationTermResponse>builder()
-                .message( "Education term Updated successfully")
+                .message(Messages.EDUCATION_TERM_UPDATED_MESSAGE)
                 .httpStatus(HttpStatus.OK)
                 .object(educationTermDto.mapEducationTermToEducationTermResponse(updatedEducationTerm))
                 .build();

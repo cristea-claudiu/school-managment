@@ -35,21 +35,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticateUser(@RequestBody @Valid LoginRequest loginRequest){
         String username = loginRequest.getUsername();
-
         String password = loginRequest.getPassword();
-
         Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token =jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails= (UserDetailsImpl) authentication.getPrincipal();
-
         Set<String> roles= userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-
         Optional<String> role =roles.stream().findFirst();
-
         //other way to use builder
         AuthResponse.AuthResponseBuilder authResponse=AuthResponse.builder();
         authResponse.username(userDetails.getUsername());

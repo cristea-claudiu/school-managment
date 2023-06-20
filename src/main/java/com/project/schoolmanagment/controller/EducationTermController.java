@@ -28,20 +28,20 @@ public class EducationTermController {
         return educationTermService.saveEducationTerm(educationTermRequest);
     }
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public EducationTermResponse getEducationTerm(@PathVariable Long id){
-       return educationTermService.findEducationTermById(id);
+       return educationTermService.findEducationTermResponseById(id);
 
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public List<EducationTermResponse> getAllEducationTerms(){
         return educationTermService.getAllEducationTerms();
 
     }
     @GetMapping("/search")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<EducationTermResponse> getAllEducationTermsByPage(@RequestParam(value = "page",defaultValue = "0")int page,
                                                                   @RequestParam(value = "size",defaultValue = "10")int size,
                                                                   @RequestParam(value = "sort",defaultValue = "startDate")String sort,
@@ -49,7 +49,7 @@ public class EducationTermController {
        return educationTermService.getAllEducationTermsByPage(page,size,sort,type);
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseMessage<?> deleteEducationTermById(@PathVariable Long id){
        return educationTermService.deleteEducationTermById(id);
     }
@@ -60,11 +60,8 @@ public class EducationTermController {
         return educationTermService.updateEducationTerm(id,educationTermRequest);
     }
 
-    //TODO homework  please write down a request that gets all education term starts dates later then entered Date
-    //  hint - > should be post request
-
     @PostMapping("/searchByDate")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public List<EducationTermResponse> getEducationTermsAfterDate(@RequestParam String date){
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         return educationTermService.getEducationTermsAfterDate(localDate);

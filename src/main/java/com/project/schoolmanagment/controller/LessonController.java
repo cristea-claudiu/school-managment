@@ -2,9 +2,7 @@ package com.project.schoolmanagment.controller;
 
 
 import com.project.schoolmanagment.entity.concrate.Lesson;
-import com.project.schoolmanagment.payload.request.EducationTermRequest;
 import com.project.schoolmanagment.payload.request.LessonRequest;
-import com.project.schoolmanagment.payload.response.EducationTermResponse;
 import com.project.schoolmanagment.payload.response.LessonResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.service.LessonService;
@@ -65,7 +63,7 @@ public class LessonController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseMessage<LessonResponse> updateLesson(@PathVariable Long id , @RequestBody LessonRequest lessonRequest){
         return lessonService.updateLesson(id,lessonRequest);
     }

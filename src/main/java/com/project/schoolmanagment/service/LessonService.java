@@ -16,9 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.text.Format;
+
 import java.util.List;
 import java.util.Set;
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,8 @@ public class LessonService {
     }
 
     public LessonResponse getLessonById(Long id) {
-        return lessonDto.mapLessonToLessonResponse(lessonRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE,id))));
+        return lessonDto.mapLessonToLessonResponse(lessonRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE,id))));
     }
 
     public ResponseMessage deleteLessonById(Long id) {
@@ -56,9 +58,10 @@ public class LessonService {
 
     public ResponseMessage<LessonResponse> getLessonByLessonName(String lessonName) {
         return ResponseMessage.<LessonResponse>builder()
-                .object(lessonDto.mapLessonToLessonResponse(lessonRepository.getLessonByLessonName(lessonName).orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE,lessonName)))))
+                .object(lessonDto.mapLessonToLessonResponse(lessonRepository.getLessonByLessonName(lessonName)
+                        .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE,lessonName)))))
                 .message(String.format(Messages.FOUND_LESSON_MESSAGE,lessonName))
-                .httpStatus(HttpStatus.CREATED)
+                .httpStatus(HttpStatus.OK)
                 .build();
     }
 
@@ -66,23 +69,12 @@ public class LessonService {
         Pageable pageable =serviceHelpers.getPageableWithProperties(page, size, sort, type);
         return lessonRepository.findAll(pageable).map(lessonDto::mapLessonToLessonResponse);
     }
-
-
-
-
-
-
-
-
-
-
     private boolean isLessonExistByName(String lessonName) {
         boolean lessonExist = lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
         if (lessonExist) {
             throw new ConflictException(String.format(Messages.ALREADY_REGISTER_LESSON_MESSAGE, lessonName));
-        } else {
-            return false;
         }
+            return false;
     }
     private void isLessonExistById(Long id) {
         lessonRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_LESSON_MESSAGE,id)));
@@ -104,6 +96,11 @@ public class LessonService {
     }
 
     public Set<Lesson> getAllLessonByLessonId(Set<Long> id) {
-        return lessonRepository.findAllByLessonId(id);
+        Set<Lesson> lessons = lessonRepository.findAllByLessonId(id);
+        if (lessons.isEmpty()) {
+            throw new ResourceNotFoundException(Messages.NOT_FOUND_LESSONS_MESSAGE);
+        }
+        return lessons;
     }
+
 }
