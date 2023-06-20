@@ -1,8 +1,6 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.payload.request.DeanRequest;
 import com.project.schoolmanagment.payload.request.ViceDeanRequest;
-import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.ViceDeanResponse;
 import com.project.schoolmanagment.service.ViceDeanService;
@@ -15,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("vicedean")
+@RequestMapping("viceDean")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
 public class ViceDeanController {
