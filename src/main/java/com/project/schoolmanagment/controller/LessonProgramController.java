@@ -1,6 +1,5 @@
 package com.project.schoolmanagment.controller;
 
-import com.project.schoolmanagment.entity.concrate.LessonProgram;
 import com.project.schoolmanagment.payload.request.LessonProgramRequest;
 import com.project.schoolmanagment.payload.response.LessonProgramResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
@@ -9,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("lessonPrograms")
@@ -24,14 +27,20 @@ public class LessonProgramController {
         return lessonProgramService.saveLessonProgram(lessonProgramRequest);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @GetMapping("/getById/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public LessonProgramResponse getLessonProgramById(@PathVariable Long id) {
         return lessonProgramService.getLessonProgramById(id);
     }
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public List<LessonProgramResponse> getLessonProgramByList() {
+        return lessonProgramService.getLessonProgramByList();
+    }
+
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Page<LessonProgramResponse> search(@RequestParam(value = "page",defaultValue = "0")int page,
                                        @RequestParam(value = "size",defaultValue = "10")int size,
                                        @RequestParam(value = "sort",defaultValue = "day")String sort,
@@ -39,18 +48,35 @@ public class LessonProgramController {
         return lessonProgramService.findByPage(page,size, sort, type);
     }
 
+    @GetMapping("/getAllUnassigned")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public List<LessonProgramResponse> getAllUnassigned() {
+        return lessonProgramService.getAllLessonProgramUnassigned();
+    }
+    @GetMapping("/getAllAssigned")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public List<LessonProgramResponse> getAllAssigned() {
+        return lessonProgramService.getAllLessonProgramAssigned();
+    }
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage deleteLessonProgramById(@PathVariable Long id){
+        return lessonProgramService.deleteLessonProgramById(id);
+    }
 
+    @GetMapping("/getAllLessonProgramByTeacher")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public Set<LessonProgramResponse> getAllLessonProgramByTeacher(HttpServletRequest httpServletRequest){
+        String userName= (String) httpServletRequest.getAttribute("username");
+        return lessonProgramService.getAllLessonProgramByTeacher(userName);
+    }
+    @GetMapping("/getAllLessonProgramByStudent")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public Set<LessonProgramResponse> getAllLessonProgramByStudent(HttpServletRequest httpServletRequest){
+        String userName= (String) httpServletRequest.getAttribute("username");
 
-
-
-
-
-
-
-
-
-
-
+        return lessonProgramService.getAllLessonProgramByStudent(userName);
+    }
 
 
 

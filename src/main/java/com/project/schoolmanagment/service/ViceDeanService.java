@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,33 +42,33 @@ public class ViceDeanService {
         ViceDean savedViceDean=viceDeanRepository.save(viceDean);
 
         return ResponseMessage.<ViceDeanResponse>builder()
-                .message("ViceDean saved")
+                .message(Messages.VICE_DEAN_SAVED_SUCCESSFULLY)
                 .httpStatus(HttpStatus.CREATED)
                 .object(viceDeanDto.mapViceDeanToViceDeanResponse(savedViceDean))
                 .build();
     }
 
-    public Optional<ViceDean> isViceDeanExist(Long viceDeanId) {
-        Optional<ViceDean> viceDean = Optional.ofNullable(viceDeanRepository.findById(viceDeanId).orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, viceDeanId))));
-        return viceDean;
+    public ViceDean isViceDeanExist(Long viceDeanId) {
+        return viceDeanRepository.findById(viceDeanId).orElseThrow(() -> new ResourceNotFoundException(String.format(Messages.NOT_FOUND_USER_MESSAGE, viceDeanId)));
+
     }
 
 
     public ResponseMessage<?> deleteViceDeanById(Long viceDeanId) {
-            Optional<ViceDean> viceDean=isViceDeanExist(viceDeanId);
+            isViceDeanExist(viceDeanId);
 
             viceDeanRepository.deleteById(viceDeanId);
             return ResponseMessage.<DeanResponse>builder()
-                    .message("Dean deleted successfully")
+                    .message(Messages.VICE_DEAN_DELETED_SUCCESSFULLY)
                     .httpStatus(HttpStatus.OK)
                     .build();
         }
 
     public ResponseMessage<ViceDeanResponse> getViceDeanById(Long viceDeanId) {
             return ResponseMessage.<ViceDeanResponse>builder()
-                    .message("Dean found successfully")
+                    .message(Messages.VICE_DEAN_FOUND_SUCCESSFULLY)
                     .httpStatus(HttpStatus.OK)
-                    .object(viceDeanDto.mapViceDeanToViceDeanResponse(isViceDeanExist(viceDeanId).get()))
+                    .object(viceDeanDto.mapViceDeanToViceDeanResponse(isViceDeanExist(viceDeanId)))
                     .build();
 
     }
@@ -85,8 +84,8 @@ public class ViceDeanService {
     }
 
     public ResponseMessage<ViceDeanResponse> update(ViceDeanRequest viceDeanRequest, Long viceDeanId) {
-        Optional<ViceDean> viceDean = isViceDeanExist(viceDeanId);
-        if (!CheckParameterUpdateMethod.checkUniqueProperties(viceDean.get(),viceDeanRequest)) {
+        ViceDean viceDean = isViceDeanExist(viceDeanId);
+        if (!CheckParameterUpdateMethod.checkUniqueProperties(viceDean,viceDeanRequest)) {
             serviceHelpers.checkDuplicate(viceDeanRequest.getUsername(),
                     viceDeanRequest.getSsn(),
                     viceDeanRequest.getPhoneNumber());
@@ -95,26 +94,9 @@ public class ViceDeanService {
         updatedViceDean.setPassword(passwordEncoder.encode(viceDeanRequest.getPassword()));
         ViceDean savedViceDean =viceDeanRepository.save(updatedViceDean);
         return ResponseMessage.<ViceDeanResponse>builder()
-                .message("ViceDean Updated successfully")
+                .message(Messages.VICE_DEAN_UPDATED_SUCCESSFULLY)
                 .httpStatus(HttpStatus.OK)
                 .object(viceDeanDto.mapViceDeanToViceDeanResponse(savedViceDean))
                 .build();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

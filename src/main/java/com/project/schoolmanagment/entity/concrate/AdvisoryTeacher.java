@@ -24,4 +24,7 @@ public class AdvisoryTeacher {
 
     @OneToOne
     private Teacher teacher;
+    public AdvisoryTeacher(String id) {
+        this.id = Long.parseLong(id);
+    }
 }

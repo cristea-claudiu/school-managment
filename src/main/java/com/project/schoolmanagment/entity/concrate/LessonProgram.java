@@ -7,12 +7,12 @@ import com.project.schoolmanagment.entity.enums.Day;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -31,6 +31,7 @@ public class LessonProgram {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime stopTime;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "lesson_program_lesson",

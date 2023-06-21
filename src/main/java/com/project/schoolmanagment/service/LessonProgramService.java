@@ -19,7 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +54,7 @@ public class LessonProgramService {
 
 
     public LessonProgramResponse getLessonProgramById(Long id) {
-        return lessonProgramDto.mapLessonProgramToLessonProgramResponse(lessonProgramRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND)));
+        return lessonProgramDto.mapLessonProgramToLessonProgramResponse(isLessonProgramExistById(id));
     }
 
     public Page<LessonProgramResponse> findByPage(int page, int size, String sort, String type) {
@@ -61,5 +63,65 @@ public class LessonProgramService {
     }
 
 
+    public List<LessonProgramResponse> getLessonProgramByList() {
+        return lessonProgramRepository.findAll().stream().map(lessonProgramDto::mapLessonProgramToLessonProgramResponse).collect(Collectors.toList());
+    }
+
+    public List<LessonProgramResponse> getAllLessonProgramUnassigned() {
+       return lessonProgramRepository.findByTeachers_IdNull().stream().map(lessonProgramDto::mapLessonProgramToLessonProgramResponse).collect(Collectors.toList());
+    }
+
+    public List<LessonProgramResponse> getAllLessonProgramAssigned() {
+        return lessonProgramRepository.findByTeachers_IdNotNull().stream().map(lessonProgramDto::mapLessonProgramToLessonProgramResponse).collect(Collectors.toList());
+
+    }
+
+    public ResponseMessage deleteLessonProgramById(Long id) {
+       LessonProgram lesson= isLessonProgramExistById(id);
+       lessonProgramRepository.delete(lesson);
+        return ResponseMessage.builder()
+                .message(Messages.LESSON_PROGRAM_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    private LessonProgram isLessonProgramExistById(Long id) {
+       return lessonProgramRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND));
+    }
+//TODO make teacher and student save endpoint
+    public Set<LessonProgramResponse> getAllLessonProgramByTeacher(String username) {
+        Set<LessonProgramResponse> lessonSet= lessonProgramRepository
+                .getLessonProgramByTeachersUsername(username)
+                .stream()
+                .map(lessonProgramDto::mapLessonProgramToLessonProgramResponse)
+                .collect(Collectors.toSet());
+        if (lessonSet.isEmpty()){
+            throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND);
+        }
+        return lessonSet;
+
+    }
+
+    public Set<LessonProgramResponse> getAllLessonProgramByStudent(String username) {
+        Set<LessonProgramResponse> lessonSet= lessonProgramRepository
+                .getLessonProgramByStudentsUsername(username)
+                .stream()
+                .map(lessonProgramDto::mapLessonProgramToLessonProgramResponse)
+                .collect(Collectors.toSet());
+        if (lessonSet.isEmpty()){
+            throw new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND);
+        }else {
+            return lessonSet;
+        }
+    }
+
+    public Set<LessonProgram> getAllLessonProgramById(Set<Long> lessonProgramId) {
+        Set<LessonProgram> programList= lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonProgramId);
+        if (programList.isEmpty()){
+            throw new BadRequestException(Messages.LESSON_PROGRAM_NOT_FOUND);
+        }
+        return programList;
+    }
 }
 
