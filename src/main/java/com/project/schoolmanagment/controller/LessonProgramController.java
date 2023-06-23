@@ -67,13 +67,13 @@ public class LessonProgramController {
     @GetMapping("/getAllLessonProgramByTeacher")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Set<LessonProgramResponse> getAllLessonProgramByTeacher(HttpServletRequest httpServletRequest){
-        String userName= (String) httpServletRequest.getAttribute("username");
+        String userName= (String) httpServletRequest.getHeader("username");
         return lessonProgramService.getAllLessonProgramByTeacher(userName);
     }
     @GetMapping("/getAllLessonProgramByStudent")
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public Set<LessonProgramResponse> getAllLessonProgramByStudent(HttpServletRequest httpServletRequest){
-        String userName= (String) httpServletRequest.getAttribute("username");
+        String userName= (String) httpServletRequest.getHeader("username");
 
         return lessonProgramService.getAllLessonProgramByStudent(userName);
     }

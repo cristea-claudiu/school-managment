@@ -38,6 +38,7 @@ public class Student extends User {
     @OneToMany(mappedBy ="student",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;
 
+
     @ManyToMany
     @JsonIgnore
     @JoinTable(

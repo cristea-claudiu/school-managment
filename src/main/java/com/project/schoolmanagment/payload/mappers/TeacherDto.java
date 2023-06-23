@@ -46,20 +46,9 @@ public class TeacherDto {
                 .email(teacher.getEmail())
                 .build();
     }
-//    public Teacher mapTeacherRequestToUpdatedTeacher(TeacherRequest teacherRequest,Long id, Set<LessonProgram> programList){
-//        return Teacher.builder().id(id)
-//                .username(teacherRequest.getUsername())
-//                .ssn(teacherRequest.getSsn())
-//                .name(teacherRequest.getName())
-//                .surname(teacherRequest.getSurname())
-//                .birthPlace(teacherRequest.getBirthPlace())
-//                .birthDay(teacherRequest.getBirthDay())
-//                .phoneNumber(teacherRequest.getPhoneNumber())
-//                .gender(teacherRequest.getGender())
-//                .email(teacherRequest.getEmail())
-//                .isAdvisor(teacherRequest.getIsAdvisor())
-//                .lessonProgramList(programList)
-//                .userRole(userRoleService.getUserRole(RoleType.TEACHER))
-//                .build();
-//    }
+    public Teacher mapTeacherRequestToUpdatedTeacher(TeacherRequest teacherRequest,Long id){
+        Teacher teacher=mapTeacherRequestToTeacher(teacherRequest);
+        teacher.setId(id);
+        return teacher;
+    }
 }

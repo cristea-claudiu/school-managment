@@ -89,7 +89,6 @@ public class LessonProgramService {
        return lessonProgramRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(Messages.LESSON_PROGRAM_NOT_FOUND));
     }
-//TODO make teacher and student save endpoint
     public Set<LessonProgramResponse> getAllLessonProgramByTeacher(String username) {
         Set<LessonProgramResponse> lessonSet= lessonProgramRepository
                 .getLessonProgramByTeachersUsername(username)
