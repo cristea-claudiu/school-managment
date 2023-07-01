@@ -52,11 +52,11 @@ public class TeacherController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @GetMapping("/search")
-    public Page<TeacherResponse> getAllDeansByPage(@RequestParam(value = "page",defaultValue = "0")int page,
+    public Page<TeacherResponse> getAllTeachersByPage(@RequestParam(value = "page",defaultValue = "0")int page,
                                                 @RequestParam(value = "size",defaultValue = "10")int size,
                                                 @RequestParam(value = "sort",defaultValue = "name")String sort,
                                                 @RequestParam(value = "type",defaultValue = "desc")String type){
-        return teacherService.getAllDeansByPage(page,size,sort,type);
+        return teacherService.getAllTeachersByPage(page,size,sort,type);
     }
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @PutMapping("/update/{userId}")
@@ -66,8 +66,8 @@ public class TeacherController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @PostMapping("/chooseLesson")
-    public ResponseMessage<TeacherResponse> choseLesson(@RequestBody @Valid ChooseLessonTeacherRequest  chooseLessonTeacherRequest){
-        return teacherService.choseLesson(chooseLessonTeacherRequest);
+    public ResponseMessage<TeacherResponse> chooseLesson(@RequestBody @Valid ChooseLessonTeacherRequest  chooseLessonTeacherRequest){
+        return teacherService.chooseLesson(chooseLessonTeacherRequest);
     }
 
 

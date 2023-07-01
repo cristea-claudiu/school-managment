@@ -21,22 +21,18 @@ public class StudentDto {
 
     public Student mapStudentRequestToStudent(StudentRequest studentRequest){
         return  Student.builder()
-                .username(studentRequest.getUsername())
+                .fatherName(studentRequest.getFatherName())
+                .motherName(studentRequest.getMotherName())
+                .birthDay(studentRequest.getBirthDay())
+                .birthPlace(studentRequest.getBirthPlace())
                 .name(studentRequest.getName())
                 .surname(studentRequest.getSurname())
                 .password(studentRequest.getPassword())
+                .username(studentRequest.getUsername())
                 .ssn(studentRequest.getSsn())
-                .birthDay(studentRequest.getBirthDay())
-                .birthPlace(studentRequest.getBirthPlace())
+                .email(studentRequest.getEmail())
                 .phoneNumber(studentRequest.getPhoneNumber())
                 .gender(studentRequest.getGender())
-                .email(studentRequest.getEmail())
-                .studentNumber(studentRequest.getStudentNumber())
-                .motherName(studentRequest.getMotherName())
-                .fatherName(studentRequest.getFatherName())
-//                .advisoryTeacher(advisoryTeacher)
-//                .lessonProgramList(lessonProgramSet)
-//                .meetList(meetList)
                 .build();
     }
     public StudentResponse mapStudentToStudentResponse(Student student){
@@ -45,40 +41,21 @@ public class StudentDto {
                 .userName(student.getUsername())
                 .name(student.getName())
                 .surname(student.getSurname())
-                .phoneNumber(student.getPhoneNumber())
                 .birthDay(student.getBirthDay())
                 .birthPlace(student.getBirthPlace())
+                .phoneNumber(student.getPhoneNumber())
                 .gender(student.getGender())
-                .ssn(student.getSsn())
                 .email(student.getEmail())
-//                .lessonProgramSet(student.getLessonProgramList())
-                .studentNumber(student.getStudentNumber())
-                .motherName(student.getMotherName())
                 .fatherName(student.getFatherName())
+                .motherName(student.getMotherName())
+                .studentNumber(student.getStudentNumber())
                 .isActive(student.isActive())
-//                .meetList(student.getMeetList())
-//                .advisoryTeacher(student.getAdvisoryTeacher())
                 .build();
     }
-    public Student mapStudentRequestToUpdatedStudent(StudentRequest studentRequest,Long id, Set<LessonProgram> lessonProgramSet, List<Meet> meetList){
-        return Student.builder().id(id)
-                .username(studentRequest.getUsername())
-                .ssn(studentRequest.getSsn())
-                .name(studentRequest.getName())
-                .surname(studentRequest.getSurname())
-                .birthPlace(studentRequest.getBirthPlace())
-                .birthDay(studentRequest.getBirthDay())
-                .phoneNumber(studentRequest.getPhoneNumber())
-                .gender(studentRequest.getGender())
-                .email(studentRequest.getEmail())
-                .studentNumber(studentRequest.getStudentNumber())
-                .motherName(studentRequest.getMotherName())
-                .fatherName(studentRequest.getFatherName())
-//                .advisoryTeacher(studentRequest.getAdvisoryTeacher())
-                .meetList(meetList)
-                .lessonProgramList(lessonProgramSet)
-                .userRole(userRoleService.getUserRole(RoleType.STUDENT))
-                .build();
+    public Student mapStudentRequestToUpdatedStudent(StudentRequest studentRequest,Long id){
+        Student student=mapStudentRequestToStudent(studentRequest);
+        student.setId(id);
+        return student;
     }
 }
 

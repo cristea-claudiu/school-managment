@@ -1,16 +1,12 @@
 package com.project.schoolmanagment.service;
 
-import com.project.schoolmanagment.entity.concrate.Dean;
-import com.project.schoolmanagment.entity.concrate.Lesson;
 import com.project.schoolmanagment.entity.concrate.LessonProgram;
 import com.project.schoolmanagment.entity.concrate.Teacher;
 import com.project.schoolmanagment.entity.enums.RoleType;
-import com.project.schoolmanagment.exception.BadRequestException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.TeacherDto;
 import com.project.schoolmanagment.payload.request.ChooseLessonTeacherRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
-import com.project.schoolmanagment.payload.response.DeanResponse;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.TeacherResponse;
 import com.project.schoolmanagment.repository.TeacherRepository;
@@ -26,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,7 +95,7 @@ public class TeacherService {
                 .build();
     }
 
-    public Page<TeacherResponse> getAllDeansByPage(int page, int size, String sort, String type) {
+    public Page<TeacherResponse> getAllTeachersByPage(int page, int size, String sort, String type) {
         Pageable pageable= serviceHelpers.getPageableWithProperties(page,size,sort,type);
         return teacherRepository.findAll(pageable).map(teacherDto::mapTeacherToTeacherResponse);
     }
@@ -128,21 +123,23 @@ public class TeacherService {
                 .build();
     }
 
-    public ResponseMessage<TeacherResponse> choseLesson(ChooseLessonTeacherRequest chooseLessonTeacherRequest) {
-            Teacher teacher=isTeacherExist(chooseLessonTeacherRequest.getTeacherId());
+    public ResponseMessage<TeacherResponse>chooseLesson (ChooseLessonTeacherRequest chooseLessonTeacherRequest){
+        Teacher teacher = isTeacherExist(chooseLessonTeacherRequest.getTeacherId());
 
-            Set<LessonProgram> lessonPrograms=lessonProgramService.getAllLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
+        Set<LessonProgram>lessonPrograms = lessonProgramService.getAllLessonProgramById(chooseLessonTeacherRequest.getLessonProgramId());
 
-            Set<LessonProgram> teacherLessonPrograms=teacher.getLessonProgramList();
-            checkSameLessonProgram.checkLessonProgram(teacherLessonPrograms,lessonPrograms);
-            teacherLessonPrograms.addAll(lessonPrograms);
-            teacher.setLessonProgramList(teacherLessonPrograms);
-            Teacher updatedTeacher=teacherRepository.save(teacher);
-            return ResponseMessage.<TeacherResponse>builder()
-                    .message(Messages.LESSON_PROGRAM_ADDED_TO_TEACHER)
-                    .httpStatus(HttpStatus.CREATED)
-                    .object(teacherDto.mapTeacherToTeacherResponse(updatedTeacher))
-                    .build();
+        Set<LessonProgram>teachersLessonProgram = teacher.getLessonProgramList();
+
+        checkSameLessonProgram.checkLessonProgram(teachersLessonProgram ,lessonPrograms);
+        teachersLessonProgram.addAll(lessonPrograms);
+        teacher.setLessonProgramList(teachersLessonProgram);
+        Teacher updatedTeacher = teacherRepository.save(teacher);
+
+        return ResponseMessage.<TeacherResponse>builder()
+                .message("Lesson Program added to teacher")
+                .httpStatus(HttpStatus.CREATED)
+                .object(teacherDto.mapTeacherToTeacherResponse(updatedTeacher))
+                .build();
 
     }
 }

@@ -19,11 +19,15 @@ public abstract class Messages {
     public static final String TEACHER_UPDATED_SUCCESSFULLY = "Teacher is updated successfully";
     public static final String TEACHER_FOUND_SUCCESSFULLY = "Teacher Found";
     public static final String TEACHER_NOT_FOUND = "Teacher not Found";
-    //Teacher
+    //Student
     public static final String STUDENT_DELETED_SUCCESSFULLY = "Student is deleted successfully";
     public static final String STUDENT_SAVED_SUCCESSFULLY = "Student is Saved successfully";
     public static final String STUDENT_UPDATED_SUCCESSFULLY = "Student is updated successfully";
     public static final String STUDENT_FOUND_SUCCESSFULLY = "Student Founded";
+    public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info with id %d not found" ;
+    public static final String STUDENT_NOT_FOUND_BY_STUDENT_ID= "Error: Student with  student id %d not found" ;
+    public static final String STUDENT_NOT_FOUND_BY_STUDENT_NAME= "Error: Student not found" ;
+    public static final String STUDENT_LESSON_SAVED= "Student lesson program saved" ;
     //ViceDean
     public static final String VICE_DEAN_DELETED_SUCCESSFULLY = "Vice Dean is deleted successfully";
     public static final String VICE_DEAN_SAVED_SUCCESSFULLY = "Vice Dean is Saved successfully";

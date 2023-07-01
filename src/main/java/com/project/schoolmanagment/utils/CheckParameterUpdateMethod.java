@@ -1,14 +1,16 @@
 package com.project.schoolmanagment.utils;
 
 import com.project.schoolmanagment.entity.abstracts.User;
+import com.project.schoolmanagment.entity.concrate.Student;
 import com.project.schoolmanagment.entity.concrate.Teacher;
+import com.project.schoolmanagment.payload.request.StudentRequest;
 import com.project.schoolmanagment.payload.request.TeacherRequest;
 import com.project.schoolmanagment.payload.request.abstracts.BaseUserRequest;
 
 public class CheckParameterUpdateMethod {
     /**
      *
-     * @param user a kind if entity that will be valideted
+     * @param user a kind if entity that will be validated
      * @param baseUserRequest DTO from UI to be changed
      * @return true if they are same
      */
@@ -27,5 +29,9 @@ public class CheckParameterUpdateMethod {
     public static boolean checkUniquePropertiesForTeacher(Teacher teacher, TeacherRequest teacherRequest){
         return checkUniqueProperties(teacher,teacherRequest)
                 || teacher.getEmail().equalsIgnoreCase(teacherRequest.getEmail());
+    }
+    public static boolean checkUniquePropertiesForStudent(Student student, StudentRequest studentRequest){
+        return checkUniqueProperties(student,studentRequest)
+                || student.getEmail().equalsIgnoreCase(studentRequest.getEmail());
     }
 }
