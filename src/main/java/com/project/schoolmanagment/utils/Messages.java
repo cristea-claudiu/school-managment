@@ -67,9 +67,11 @@ public abstract class Messages {
     public static final String LESSON_PROGRAM_NOT_FOUND = "Lesson Program NOT FOUND";
 
     public static final String ADVISORY_TEACHER_NOT_FOUND_SUCCESSFULLY = "Advisory Teacher Not Founded";
+    public static final String ADVISORY_TEACHER_DELETED = "Advisory Teacher deleted";
 
     public static final String LESSON_PROGRAM_EXIST_MESSAGE = "Error: Course schedule can not be selected fir the same hour and date" ;
     public static final String LESSON_PROGRAM_ADDED_TO_TEACHER = "Lesson program added to teacher" ;
+    public static final String STUDENT_INFO_SAVED = "Student info saved successfully" ;
 
 
     private Messages() {

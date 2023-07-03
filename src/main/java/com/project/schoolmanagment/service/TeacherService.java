@@ -46,6 +46,7 @@ public class TeacherService {
                 teacherRequest.getPhoneNumber(),
                 teacherRequest.getEmail());
         Teacher teacher=teacherDto.mapTeacherRequestToTeacher(teacherRequest);
+        teacher.setUserRole(userRoleService.getUserRole(RoleType.TEACHER));
         teacher.setPassword(passwordEncoder.encode(teacherRequest.getPassword()));
         teacher.setLessonProgramList(programList);
         Teacher savedTeacher=teacherRepository.save(teacher);
@@ -76,6 +77,15 @@ public class TeacherService {
 
     private Teacher isTeacherExist(Long id){
        return teacherRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(Messages.TEACHER_NOT_FOUND));
+    }
+    public Teacher getTeacherByUsername(String username) {
+        if(!teacherRepository.existsByUsername(username)){
+            throw new ResourceNotFoundException(Messages.TEACHER_NOT_FOUND);
+        }
+        return teacherRepository.getTeacherByUsername(username);
+
+
+
     }
     public ResponseMessage deleteTeacherById(Long id) {
         isTeacherExist(id);

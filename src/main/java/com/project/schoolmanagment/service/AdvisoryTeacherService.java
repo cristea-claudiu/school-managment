@@ -13,6 +13,7 @@ import com.project.schoolmanagment.utils.ServiceHelpers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,6 +75,11 @@ public class AdvisoryTeacherService {
     }
 
     public ResponseMessage deleteAdvisoryTeacherById(Long id) {
-        return null;
+        AdvisoryTeacher advisoryTeacher=getById(id);
+        advisoryTeacherRepository.deleteById(advisoryTeacher.getId());
+        return ResponseMessage.<AdvisoryTeacher>builder()
+                .message(Messages.ADVISORY_TEACHER_DELETED)
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 }

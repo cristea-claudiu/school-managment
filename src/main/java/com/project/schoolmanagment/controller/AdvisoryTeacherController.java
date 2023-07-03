@@ -33,11 +33,12 @@ public class AdvisoryTeacherController {
         return advisoryTeacherService.search(page,size,sort,type);
     }
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANTMANAGER')")
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseMessage deleteAdvisoryTeacher(@PathVariable Long id){
         return advisoryTeacherService.deleteAdvisoryTeacherById(id);
 
     }
+
 
 
 }

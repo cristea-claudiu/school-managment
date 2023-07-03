@@ -75,7 +75,7 @@ public class StudentService {
     public List<StudentResponse> getAllStudents() {
         return studentRepository.findAll().stream().map(studentDto::mapStudentToStudentResponse).collect(Collectors.toList());
     }
-    private Student isStudentExist(Long studentid){
+    public Student isStudentExist(Long studentid){
         return studentRepository
                 .findById(studentid)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format(Messages.STUDENT_NOT_FOUND_BY_STUDENT_ID,studentid)));
