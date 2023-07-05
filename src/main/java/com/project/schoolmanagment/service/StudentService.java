@@ -148,7 +148,7 @@ return student;
     public Student GetStudentById(Long id) {
         return isStudentExist(id);
     }
-    public Student GetStudentByUserName(String userName) {
+    public Student getStudentByUserName(String userName) {
         return isStudentExist(userName);
     }
 
@@ -172,5 +172,8 @@ return student;
                 .httpStatus(HttpStatus.OK)
                 .object(studentDto.mapStudentToStudentResponse(savedStudent))
                 .build();
+    }
+    public List<Student> getStudentById(Long[] studentIds) {
+        return studentRepository.findByIdsEquals(studentIds);
     }
 }

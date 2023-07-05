@@ -5,6 +5,7 @@ import com.project.schoolmanagment.entity.enums.Note;
 import com.project.schoolmanagment.exception.ConflictException;
 import com.project.schoolmanagment.exception.ResourceNotFoundException;
 import com.project.schoolmanagment.payload.mappers.StudentInfoDto;
+import com.project.schoolmanagment.payload.request.UpdateStudentInfoRequest;
 import com.project.schoolmanagment.payload.response.ResponseMessage;
 import com.project.schoolmanagment.payload.response.StudentInfoRequest;
 import com.project.schoolmanagment.payload.response.StudentInfoResponse;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -124,7 +126,7 @@ public class StudentInfoService {
     public StudentInfo isStudentInfoExistById(Long id) {
         boolean isExist=studentInfoRepository.existsByIdEquals(id);
         if (!isExist){
-            throw new ResourceNotFoundException(Messages.STUDENT_INFO_NOT_FOUND);
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND,id));
         }else {
             return studentInfoRepository.findById(id).get() ;
         }
@@ -132,5 +134,48 @@ public class StudentInfoService {
     public Page<StudentInfoResponse> search(int page, int size, String sort, String type) {
         Pageable pageable= serviceHelpers.getPageableWithProperties(page, size, sort, type);
         return studentInfoRepository.findAll(pageable).map(studentInfoDto::mapStudentInfoToStudentInfoResponse);
+    }
+
+    public ResponseMessage<StudentInfoResponse> update(UpdateStudentInfoRequest updateStudentInfoRequest, Long studentInfoId) {
+       Lesson lesson=lessonService.isLessonExistById(updateStudentInfoRequest.getLessonId());
+       StudentInfo studentInfo=isStudentInfoExistById(studentInfoId);
+       EducationTerm educationTerm=educationTermService.getEducationTermById(updateStudentInfoRequest.getEducationTermId());
+
+       Double noteAverage=calculateExamAverage(updateStudentInfoRequest.getMidtermExam(),updateStudentInfoRequest.getFinalExam());
+       Note note=checkLetterGrade(noteAverage);
+      StudentInfo studentInfoForUpdate=studentInfoDto.mapUpdateStudentInfoRequestToStudentInfo(updateStudentInfoRequest,studentInfoId,lesson,educationTerm,note,noteAverage);
+      studentInfoForUpdate.setStudent(studentInfo.getStudent());
+      studentInfoForUpdate.setTeacher(studentInfo.getTeacher());
+      StudentInfo updatedStudentInfo=studentInfoRepository.save(studentInfoForUpdate);
+      return ResponseMessage.<StudentInfoResponse>builder()
+              .object(studentInfoDto.mapStudentInfoToStudentInfoResponse(updatedStudentInfo))
+              .message(Messages.STUDENT_INFO_UPDATED)
+              .httpStatus(HttpStatus.OK)
+              .build();
+    }
+
+    public Page<StudentInfoResponse> getAllForTeacher(HttpServletRequest httpServletRequest, int page, int size) {
+        Pageable pageable =serviceHelpers.getPageableWithProperties(page,size);
+        String userName= (String) httpServletRequest.getAttribute("username");
+        return studentInfoRepository.findByTeacherId_UsernameEquals(userName,pageable).map(studentInfoDto::mapStudentInfoToStudentInfoResponse);
+    }
+
+    public Page<StudentInfoResponse> getAllForStudent(HttpServletRequest httpServletRequest, int page, int size) {
+        Pageable pageable =serviceHelpers.getPageableWithProperties(page,size);
+        String userName= (String) httpServletRequest.getAttribute("username");
+        return studentInfoRepository.findByStudentId_UsernameEquals(userName,pageable).map(studentInfoDto::mapStudentInfoToStudentInfoResponse);
+    }
+
+    public List<StudentInfoResponse> getStudentInfoByStudentId(Long studentId) {
+        Student student=studentService.isStudentExist(studentId);
+        if(!studentInfoRepository.existsByStudent_IdEquals(studentId)){
+            throw new ResourceNotFoundException(String.format(Messages.STUDENT_INFO_NOT_FOUND,studentId));
+        }
+        return  studentInfoRepository.findByStudent_IdEquals(studentId).stream().map(studentInfoDto::mapStudentInfoToStudentInfoResponse).collect(Collectors.toList());
+    }
+
+    public StudentInfoResponse getStudentInfoById(Long studentInfoId) {
+
+        return studentInfoDto.mapStudentInfoToStudentInfoResponse(isStudentInfoExistById(studentInfoId));
     }
 }

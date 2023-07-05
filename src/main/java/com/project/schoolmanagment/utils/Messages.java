@@ -72,6 +72,14 @@ public abstract class Messages {
     public static final String LESSON_PROGRAM_EXIST_MESSAGE = "Error: Course schedule can not be selected fir the same hour and date" ;
     public static final String LESSON_PROGRAM_ADDED_TO_TEACHER = "Lesson program added to teacher" ;
     public static final String STUDENT_INFO_SAVED = "Student info saved successfully" ;
+    public static final String STUDENT_INFO_UPDATED = "Student info Updated successfully" ;
+
+
+    public static final String MEET_HOURS_CONFLICT_ERROR = "Meet hours has conflict with existing meets" ;
+    public static final String MEET_SAVED = "Meet saved successfully" ;
+    public static final String MEET_NOT_EXIST = "Meet Not found" ;
+    public static final String MEET_FOUND = "Meet found" ;
+    public static final String MEET_UPDATED = "Meet updated successfully" ;
 
 
     private Messages() {

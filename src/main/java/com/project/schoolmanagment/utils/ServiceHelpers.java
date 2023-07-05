@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Component
@@ -57,6 +58,16 @@ public class ServiceHelpers {
         }
         return pageable;
     }
+    public  String getUsernameAttribute(HttpServletRequest httpServletRequest) {
+        String userName = (String) httpServletRequest.getAttribute("username");
+        return userName;
+    }
+    public Pageable getPageableWithProperties(int page, int size){
+         Pageable pageable = PageRequest.of(page,size,Sort.by("id").descending());
+         return pageable;
+
+    }
+
 
 
 

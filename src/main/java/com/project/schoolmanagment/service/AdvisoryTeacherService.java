@@ -82,4 +82,8 @@ public class AdvisoryTeacherService {
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
+    public AdvisoryTeacher getAdvisoryTeacherByUsername(String username) {
+        return advisoryTeacherRepository.getAdvisoryTeacherByTeacherUsername(username).orElseThrow(() -> new ResourceNotFoundException(Messages.ADVISORY_TEACHER_NOT_FOUND_SUCCESSFULLY));
+
+    }
 }

@@ -26,7 +26,7 @@ public class Meet {
     private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
-    private LocalDate Date;
+    private LocalDate date;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime startTime;
