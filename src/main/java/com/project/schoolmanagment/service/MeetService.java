@@ -138,7 +138,10 @@ public class MeetService {
     public ResponseEntity<List<MeetResponse>> getAllMeetByStudent(HttpServletRequest httpServletRequest) {
         String userName=serviceHelpers.getUsernameAttribute(httpServletRequest);
         Student student=studentService.getStudentByUserName(userName);
-        List<MeetResponse> meetResponsesList=meetRepository.findByStudentList_IdEquals(student.getId()).stream().map(meetDto::mapMeetToMeetResponse).collect(Collectors.toList());
+        List<MeetResponse> meetResponsesList=meetRepository.findByStudentList_IdEquals(student.getId())
+                .stream()
+                .filter(t-> t.getStudentList().removeIf(std-> !std.getId().equals(student.getId())))
+                .map(meetDto::mapMeetToMeetResponse).collect(Collectors.toList());
         return ResponseEntity.ok(meetResponsesList);
     }
 
@@ -153,4 +156,5 @@ public class MeetService {
        Pageable pageable=serviceHelpers.getPageableWithProperties(page,size);
        return ResponseEntity.ok(meetRepository.findByAdvisoryTeacher_IdEquals(advisoryTeacher.getId(),pageable).map(meetDto::mapMeetToMeetResponse));
     }
+
 }

@@ -23,7 +23,6 @@ public abstract class Messages {
     public static final String STUDENT_DELETED_SUCCESSFULLY = "Student is deleted successfully";
     public static final String STUDENT_SAVED_SUCCESSFULLY = "Student is Saved successfully";
     public static final String STUDENT_UPDATED_SUCCESSFULLY = "Student is updated successfully";
-    public static final String STUDENT_FOUND_SUCCESSFULLY = "Student Founded";
     public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info with id %d not found" ;
     public static final String STUDENT_NOT_FOUND_BY_STUDENT_ID= "Error: Student with  student id %d not found" ;
     public static final String STUDENT_NOT_FOUND_BY_STUDENT_NAME= "Error: Student not found" ;
@@ -39,13 +38,11 @@ public abstract class Messages {
     //Contact Message
     public static final String ALREADY_SEND_A_MESSAGE_TODAY = "Error: you have already send a message with this email";
     public static final String ALREADY_REGISTER_MESSAGE_USERNAME = "Error: USER with username %s already registered";
-    public static final String ALREADY_REGISTER_MESSAGE_EMAIL = "Error: USER with email %s already registered";
     public static final String ALREADY_REGISTER_MESSAGE_SSN = "Error: USER with ssn %s already registered";
     public static final String ALREADY_REGISTER_MESSAGE_PHONE_NUMBER = "Error: USER with phone number %s already registered";
     //education term related messages
     public static final String EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE = "Error: The start date cannot be earlier than the last registration date ";
     public static final String EDUCATION_END_DATE_IS_EARLIER_THAN_START_DATE = "Error: The end date cannot be earlier than the start date ";
-    public static final String EDUCATION_LAST_REGISTRATION_DATE_IS_AFTER_END_DATE = "Error: To late ";
     public static final String EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE = "Error: Education Term with Term And Year already exist ";
     public static final String EDUCATION_TERM_NOT_FOUND_MESSAGE = "Error: Education Term with id %s not found";
     public static final String EDUCATION_TERM_SAVED_MESSAGE = "Education Term Saved successfully";
@@ -70,7 +67,6 @@ public abstract class Messages {
     public static final String ADVISORY_TEACHER_DELETED = "Advisory Teacher deleted";
 
     public static final String LESSON_PROGRAM_EXIST_MESSAGE = "Error: Course schedule can not be selected fir the same hour and date" ;
-    public static final String LESSON_PROGRAM_ADDED_TO_TEACHER = "Lesson program added to teacher" ;
     public static final String STUDENT_INFO_SAVED = "Student info saved successfully" ;
     public static final String STUDENT_INFO_UPDATED = "Student info Updated successfully" ;
 

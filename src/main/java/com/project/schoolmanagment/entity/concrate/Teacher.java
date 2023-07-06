@@ -29,6 +29,7 @@ public class Teacher extends User {
 
     @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
